@@ -1,0 +1,9 @@
+{
+  "name": "chartanno-rule-based-d3",
+  "version": "0.1.0",
+  "private": true,
+  "description": "D3 adapter for the ChartAnno rendered-object IR pipeline",
+  "dependencies": {
+    "d3": "7.9.0"
+  }
+}

@@ -1,0 +1,9 @@
+matplotlib
+numpy
+pandas
+seaborn
+scipy
+Pillow
+squarify
+XlsxWriter
+openpyxl

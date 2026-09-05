@@ -1,0 +1,31 @@
+{
+  "files": {
+    "data/input_code.jsonl": 3600,
+    "data/input_code_image.jsonl": 3600
+  },
+  "schema": {
+    "id": "Stable row id: <sample_id>_<level>_<input kind>",
+    "category": "Chart category",
+    "sample_id": "Source sample id",
+    "level": "intent | operation | implementation",
+    "input_type": "Input: code | Input: code+Image",
+    "instruction": "Prompt text used for the model input",
+    "GT w/o anno code": "Ground-truth code before annotation",
+    "GT w/o anno chart": "Ground-truth chart before annotation; null for Input: code rows",
+    "GT code": "Ground-truth code after annotation",
+    "GT chart": "Ground-truth chart after annotation"
+  },
+  "levels": [
+    "intent",
+    "operation",
+    "implementation"
+  ],
+  "image_paths_are_relative_to": "repository root; locally this is the output-root directory",
+  "source_roots": {
+    "prompt_root": "test_prompt",
+    "code_root": "dataset_code",
+    "code_wo_anno_root": "dataset_code_removed",
+    "chart_root": "dataset_image_new",
+    "chart_wo_anno_root": "dataset_image_removed"
+  }
+}

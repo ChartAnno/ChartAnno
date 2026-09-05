@@ -1,0 +1,15 @@
+{
+  "display_name": "example-model",
+  "report_title": "example-model annotation evaluation",
+  "dataset_code_dir": "dataset_code",
+  "dataset_code_removed_dir": "dataset_code_removed",
+  "dataset_image_removed_dir": "dataset_image_removed",
+  "test_code_dir": "test_code",
+  "test_image_dir": "test_code_image",
+  "annotations_dir": "outputs/annotations",
+  "rendered_images_dir": "outputs/rendered_images",
+  "analysis_dir": "outputs/analysis",
+  "gt_annotations_dir": "",
+  "shared_text_extraction_dir": "",
+  "execution_cwd": "."
+}

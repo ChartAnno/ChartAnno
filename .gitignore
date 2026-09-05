@@ -1,0 +1,21 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+.env
+outputs/
+
+# Local processing scripts
+build_github_jsonl.py
+
+# Exclude per-model huge CSVs
+results/per_model_combined_csv/
+
+# Release artifacts
+hf_release/chartanno.tar.gz
+hf_release/chartanno_d3_svg.tar.gz
+hf_release/d3_svg_data/

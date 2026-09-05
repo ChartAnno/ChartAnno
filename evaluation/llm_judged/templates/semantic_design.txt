@@ -1,0 +1,154 @@
+You are an expert judge for chart annotation quality.
+
+Evaluate only the added annotations in the AI-generated chart, not the base chart design.
+Use the instruction, AI image, Text_Relation_Results, and GT image to judge whether the annotations are semantically correct, visually clear, well organized, and effective in guiding attention.
+Use the base chart only as context for interpreting the annotations.
+Text_Relation_Results provides text-overlap and off-canvas statistics as supporting evidence.
+
+Scoring Policy
+- Use a 0–5 rating scale for each metric.
+- 0 = completely missing or extremely poor.
+- 1 = very poor.
+- 2 = below the acceptable level.
+- 3 = acceptable.
+- 4 = clearly above acceptable.
+- 5 = highest quality.
+- Score strictly.
+- If uncertain, choose the lower score.
+- Evaluate each metric independently.
+- Return JSON only.
+
+# Semantic Consistency
+
+Judge the following two metrics based on the instruction and the generated annotations, using the GT image as a reference when needed.
+
+## 1. Semantic Faithfulness (sf)
+
+Description:
+Evaluate whether the annotations follow the intended meaning of the instruction.
+
+Check:
+- target object
+- specified text
+- trend, value, relation, and conclusion
+- missing required content
+- wrong reference
+- factual error
+- over-generation
+- wrong visual encoding
+- misleading grouping
+
+Level:
+- 1: Clear semantic failure, such as wrong target, wrong trend/value/relation/conclusion, missing key content, major factual error, wrong reference, over-generation, or wrong encoding.
+- 2: Noticeable semantic problems. The main meaning is partly preserved, but local errors, incomplete execution, inaccurate value/trend/relation/text, or partial omission remain.
+- 3: Acceptable. The target object and main meaning are basically correct, with only minor non-critical problems.
+- 4: Clearly above acceptable. Key targets, text, meaning, relations, scope, and structure are correct, with at most trivial problems.
+- 5: All semantic requirements are fully and accurately satisfied, and are highly consistent with the instruction and GT image.
+
+## 2. Semantic Clarity (sc)
+
+Description:
+Evaluate whether the relation between annotation text and visual objects is clear.
+
+Check:
+- clear referent
+- text-object relation
+- ambiguity
+- competing interpretations
+- need for extra inference
+
+Level:
+- 1: Clear failure, including unclear referents, wrong or unstable text-object relations, obvious ambiguity, misleading encoding, or competing interpretations.
+- 2: Noticeable problems, including locally unclear object, relation, or meaning that requires extra inference, pause, or confirmation.
+- 3: Acceptable. Referents are clear and the text-object relation is basically followable, with only minor ambiguity.
+- 4: Clearly above acceptable. Object, relation, and meaning are clear, stable, and not misleading.
+- 5: Meaning is immediately clear; the relation between text and visual objects is natural and easy to understand.
+
+# Design Effectiveness
+
+## 3. Visual Clarity (vc)
+
+Description:
+Evaluate whether annotations interfere with reading the chart.
+Focus on overlap, clipping, crowding, and blocking between annotations and chart content.
+Text_Relation_Results provides evidence, but direct visual judgment from the image has priority when visible blocking is present.
+
+Check:
+- overlap or clipping among annotations
+- blocking between annotations and chart content
+- blocked titles, subtitles, axis labels, legends, tick labels, data marks, or key labels
+- readability of key chart information
+
+Level:
+- 1: Severe clarity failure, including severe overlap, intrusion into essential chart text, visible blocking of key chart content, obvious clipped/off-canvas text, or unreadable placement. Typical triggers include any severe overlap that makes text unreadable, off-canvas or clipped text ≥ 10%, or moderate overlap > 50%.
+- 2: Noticeable clarity problems, including visible crowding, conflict, moderate overlap, partial blocking, competition with chart content, partial blocking of non-critical data marks, or non-severe clipping/off-canvas issues. Typical triggers include 20%–50% moderate overlap or anno_overlap_pct ≥ 40%.
+- 3: Acceptable. The chart is basically readable, with only minor local crowding or mild readable overlap in non-critical areas; key chart text and data content remain unobstructed.
+- 4: Clearly above acceptable. Annotations and chart content are clearly separated, with no visible overlap, clipping, blocking, or intrusion into important chart information.
+- 5: Reading is smooth, with almost no visible clarity issue and no intrusion into important chart information.
+
+## 4. Annotation Organization Quality (org)
+
+Description:
+Evaluate whether annotations are well placed and visually fit the chart.
+Focus on placement, grouping, spacing, hierarchy, target attachment, and color use.
+This metric penalizes poor organization even when the chart remains readable.
+
+Check:
+- placement
+- grouping
+- hierarchy
+- spacing
+- whitespace
+- target attachment
+- redundancy
+- disorder
+- overly complex annotation groups
+- color contrast
+- separability
+- coordination
+- support for emphasis
+
+Level:
+- 1: Clear organization failure, including chaotic placement, clearly wrong grouping, annotations largely outside the chart body, severe detachment from targets, or colors that seriously harm recognition or create annotation-data confusion. This includes cases where more than 50% of annotation groups contain four or more elements.
+- 2: Clear organization or color problems, including loose or scattered placement, intrusion into title/subtitle/axis/legend areas, placement outside the main plot area or chart body, weak target attachment, redundancy, local imbalance, poor spacing, weak contrast, poor separability, or confusing color use. This includes cases where more than 20% of annotation groups contain four or more elements.
+- 3: Acceptable. The layout is generally reasonable; annotations are within or visually integrated with the main chart body, close enough to targets, readable, and acceptable in color use.
+- 4: Clearly above acceptable. Grouping, target attachment, spacing, hierarchy, and colors are well coordinated, with no intrusion into essential chart-text areas.
+- 5: Excellent organization. The composition is balanced, natural, and easy to parse, with effective color use and no intrusion into essential chart-text areas.
+
+## 5. Attention Guidance (attn)
+
+Description:
+Evaluate whether the annotations highlight the main target and create a clear visual focus.
+
+Check:
+- target salience
+- hierarchy clarity and stability
+- competing highlights or misleading focus
+- search effort needed to find the focus
+
+Level:
+- 1: Clear failure, including attention drawn to the wrong place, main target severely buried, or strongly misleading focus.
+- 2: Noticeable problems, including weak salience, competing highlights, hierarchy confusion, unstable focus, or substantial search effort.
+- 3: Acceptable. The main target can be found and the guidance basically works, but salience and hierarchy are ordinary; brief search may be needed.
+- 4: Clearly above acceptable. The main target is fairly salient, hierarchy is clear and stable, and the focus can usually be grasped quickly.
+- 5: The main target is extremely clear; visual guidance is efficient and natural, and the focus can be identified almost immediately.
+
+# Constraints
+
+{stage_constraints}
+
+# Output Format
+
+Return exactly one complete JSON object.
+Do not output markdown, code fences, explanations, commentary, or any extra text.
+Do not truncate the JSON, and return the JSON in a single line.
+Use exactly the following schema, where each metric value is an integer score from 0 to 5:
+{"results":[{"sf":0,"sc":0,"vc":0,"org":0,"attn":0}]}
+
+# Inputs
+
+- Instruction: {instruction}
+- Text_Relation_Results:
+{text_relation_results}
+- AI image: the chart image generated by the evaluated model
+- GT image: the reference annotated chart image
